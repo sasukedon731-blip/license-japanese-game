@@ -30,6 +30,7 @@ export const metadata: Metadata = {
     description: "外国免許切替向けの日本語・知識学習アプリ",
     siteName: APP_NAME,
     type: "website",
+    images: [{ url: "/icons/icon-512.png", width: 512, height: 512, alt: APP_NAME }],
   },
 }
 
