@@ -1,0 +1,9 @@
+修正内容
+- 個人新規登録時に schemaVersion: 3 を初期保存
+- 企業コード登録時に schemaVersion: 3 を初期保存
+- クライアント側の loadAndRepairUserPlanState が保護フィールド schemaVersion を後から更新しないよう修正
+
+確認
+- Next.js コンパイル成功
+- TypeScriptチェック通過
+- この環境ではページデータ収集工程がタイムアウトしたため、最終完走はローカルで npm install → npm run build を確認してください。

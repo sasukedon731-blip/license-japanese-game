@@ -136,11 +136,6 @@ export async function loadAndRepairUserPlanState(uid: string): Promise<UserPlanS
   const patch: Record<string, any> = {}
   let needUpdate = false
 
-  if (data?.schemaVersion !== 3) {
-    patch.schemaVersion = 3
-    needUpdate = true
-  }
-
   if (data?.accountType !== accountType) {
     patch.accountType = accountType
     needUpdate = true

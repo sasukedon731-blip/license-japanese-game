@@ -60,6 +60,7 @@ export default function RegisterPage() {
         role: "user",
         accountType: "personal",
         plan,
+        schemaVersion: 3,
         selectedQuizTypes,
         billing: {
           accountType: "personal",

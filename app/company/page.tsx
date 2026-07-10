@@ -46,6 +46,7 @@ export default function CompanyPage() {
         companyCode: code,
         companyName: company?.name ?? code,
         plan: "7",
+        schemaVersion: 3,
         selectedQuizTypes: normalizeSelectedForPlan([], entitled, "7"),
         billing: {
           accountType: "company",
