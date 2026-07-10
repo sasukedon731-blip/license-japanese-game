@@ -1,0 +1,118 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userDoc(uid) {
+      return get(/databases/$(database)/documents/users/$(uid));
+    }
+
+    function myRole() {
+      return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        ? userDoc(request.auth.uid).data.role
+        : null;
+    }
+
+    function isAdmin() {
+      return myRole() == "admin";
+    }
+
+    function isCompanyAdmin() {
+      return myRole() == "company_admin";
+    }
+
+    function myCompanyCode() {
+      return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        ? userDoc(request.auth.uid).data.companyCode
+        : null;
+    }
+
+    function protectedUserKeys() {
+      return [
+        "billing",
+        "role",
+        "companyCode",
+        "companyName",
+        "accountType",
+        "createdAt",
+        "uid"
+      ];
+    }
+
+    match /users/{uid} {
+      allow get: if signedIn() && (
+        request.auth.uid == uid ||
+        isAdmin() ||
+        (isCompanyAdmin() && resource.data.companyCode == myCompanyCode())
+      );
+
+      allow list: if signedIn() && (
+        isAdmin() ||
+        (isCompanyAdmin() && resource.data.companyCode == myCompanyCode())
+      );
+
+      allow create: if signedIn() &&
+        request.auth.uid == uid &&
+        request.resource.data.uid == uid &&
+        request.resource.data.role == "user" &&
+        (
+          (
+            request.resource.data.accountType == "personal" &&
+            request.resource.data.billing.accountType == "personal" &&
+            request.resource.data.billing.method == "trial" &&
+            request.resource.data.billing.status == "trialing" &&
+            request.resource.data.billing.currentPlan == "trial"
+          ) ||
+          (
+            request.resource.data.accountType == "company" &&
+            request.resource.data.billing.accountType == "company" &&
+            request.resource.data.billing.method == "company" &&
+            request.resource.data.billing.status == "active" &&
+            request.resource.data.billing.currentPlan == "7" &&
+            request.resource.data.companyCode is string &&
+            exists(/databases/$(database)/documents/companies/$(request.resource.data.companyCode)) &&
+            get(/databases/$(database)/documents/companies/$(request.resource.data.companyCode)).data.active != false
+          )
+        );
+
+      allow update: if signedIn() &&
+        request.auth.uid == uid &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(protectedUserKeys());
+
+      allow delete: if isAdmin();
+    }
+
+    match /users/{uid}/progress/{quizType} {
+      allow read: if signedIn() && (
+        request.auth.uid == uid ||
+        isAdmin() ||
+        (
+          isCompanyAdmin() &&
+          get(/databases/$(database)/documents/users/$(uid)).data.companyCode == myCompanyCode()
+        )
+      );
+      allow write: if signedIn() && request.auth.uid == uid;
+    }
+
+    match /companies/{companyCode} {
+      allow get: if signedIn() && (
+        isAdmin() ||
+        (resource.data.active != false) ||
+        (isCompanyAdmin() && companyCode == myCompanyCode())
+      );
+      allow list: if signedIn() && isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /paymentOrders/{orderId} {
+      allow read, write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

@@ -1,0 +1,190 @@
+.wrap {
+  width: 100%;
+}
+
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.back {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  font-weight: 900;
+  opacity: 0.9;
+  text-decoration: none;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.desc {
+  margin-top: 6px;
+  opacity: 0.85;
+  line-height: 1.7;
+}
+
+.card {
+  margin-top: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 900;
+  opacity: 0.8;
+}
+
+.seg {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.segBtn {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.7);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.segBtnActive {
+  border: none;
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+}
+
+.help {
+  margin-top: 8px;
+  font-size: 12px;
+  opacity: 0.75;
+  line-height: 1.6;
+}
+
+.actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.7);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.btnMain {
+  border: none;
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+}
+
+.ruleList {
+  margin-top: 10px;
+  padding-left: 16px;
+  opacity: 0.9;
+  line-height: 1.7;
+}
+
+
+.wrap{
+  position: relative;
+  overflow: hidden;
+}
+.wrap::before{
+  content:"";
+  position:absolute;
+  inset:-140px;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(120, 190, 255, 0.24), transparent 45%),
+    radial-gradient(circle at 95% 10%, rgba(255, 190, 120, 0.18), transparent 55%),
+    radial-gradient(circle at 80% 95%, rgba(160, 220, 255, 0.14), transparent 55%),
+    radial-gradient(circle at 15% 90%, rgba(255, 210, 160, 0.12), transparent 55%);
+  pointer-events:none;
+  z-index:0;
+}
+.backRow, .title, .desc, .ruleList, .card, .actions, .help, .rankCard { position: relative; z-index: 1; }
+
+.rankCard{
+  margin-top: 14px;
+  padding: 14px 14px;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(6px);
+}
+.rankHead{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.rankLabel{
+  font-size: 13px;
+  font-weight: 800;
+  opacity: 0.9;
+}
+.rankHint{
+  font-size: 11px;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+.rankEmpty{
+  font-size: 12px;
+  opacity: 0.65;
+}
+.rankList{
+  margin:0;
+  padding-left:0;
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.rankRow{
+  display:grid;
+  grid-template-columns: 24px 1fr auto;
+  gap: 10px;
+  align-items:center;
+  font-size: 12px;
+}
+.rankNo{
+  display:inline-flex;
+  width:24px;
+  height:24px;
+  border-radius:999px;
+  border: 1px solid rgba(0,0,0,0.10);
+  align-items:center;
+  justify-content:center;
+  font-weight: 900;
+  background: rgba(255,255,255,0.65);
+}
+.rankName{
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  opacity:0.9;
+}
+.rankScore{
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+  opacity:0.9;
+}

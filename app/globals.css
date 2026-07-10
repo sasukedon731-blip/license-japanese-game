@@ -1,0 +1,672 @@
+:root{
+  --bg:#f7f8fb;
+  --card:#ffffff;
+  --text:#111827;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+
+  --primary:#2563eb;
+  --primaryHover:#1d4ed8;
+
+  --accent:#f59e0b;
+  --success:#16a34a;
+  --danger:#dc2626;
+
+  --radius:14px;
+}
+
+*{ box-sizing:border-box; }
+html, body { height:100%; }
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
+  line-height:1.5;
+}
+
+a{ color:inherit; text-decoration:none; }
+
+main{
+  max-width:860px;
+  margin:0 auto;
+  padding:24px 16px 40px;
+}
+
+h1,h2,h3{ margin:0 0 16px; }
+p{ margin:0 0 12px; }
+
+ul{ list-style:none; padding:0; margin:0; }
+hr{
+  border:none;
+  border-top:1px solid var(--border);
+  margin:16px 0;
+}
+
+/* --- layout helpers --- */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:0 6px 18px rgba(0,0,0,.06);
+}
+
+.stack{ display:flex; flex-direction:column; gap:12px; }
+.row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.spacer{ flex:1; }
+
+.badge{
+  display:inline-flex;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+}
+
+/* --- Button base (global) --- */
+.btn{
+  appearance:none;
+  width:100%;
+  padding:14px 14px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:#fff;
+  color:var(--text);
+  cursor:pointer;
+  font-weight:900;
+  font-size:15px;
+  letter-spacing:.2px;
+  transition:transform .03s ease, background .15s ease, border-color .15s ease;
+  opacity:1;
+}
+.btn:hover{ background:#f3f4f6; }
+.btn:active{ transform:translateY(1px); }
+.btn:disabled{ opacity:.65; cursor:not-allowed; }
+
+/* variants */
+.btnPrimary{
+  border:1px solid rgba(37,99,235,.35);
+  background:rgba(37,99,235,.12);
+}
+.btnPrimary:hover{ background:rgba(37,99,235,.18); }
+
+.btnAccent{
+  border:1px solid rgba(245,158,11,.35);
+  background:rgba(245,158,11,.14);
+}
+.btnAccent:hover{ background:rgba(245,158,11,.18); }
+
+.btnSuccess{
+  border:1px solid rgba(22,163,74,.30);
+  background:rgba(22,163,74,.12);
+}
+.btnSuccess:hover{ background:rgba(22,163,74,.16); }
+
+/* --- Choice buttons --- */
+.choice{
+  text-align:left;
+  background:#fff;
+}
+.choice:hover{ background:#f3f4f6; }
+
+/* 以前より「濃く・ハッキリ」 */
+.choiceCorrect{
+  border:1px solid rgba(22,163,74,.65);
+  background:rgba(22,163,74,.22);
+  box-shadow:0 0 0 3px rgba(22,163,74,.18);
+}
+
+.choiceWrong{
+  border:1px solid rgba(220,38,38,.65);
+  background:rgba(220,38,38,.22);
+  box-shadow:0 0 0 3px rgba(220,38,38,.16);
+}
+
+
+/* --- notices --- */
+.noticeOk{
+  border:1px solid rgba(22,163,74,.25);
+  background:rgba(22,163,74,.08);
+  color:#065f46;
+  border-radius:12px;
+  padding:10px 12px;
+  font-weight:800;
+}
+.noticeNg{
+  border:1px solid rgba(220,38,38,.25);
+  background:rgba(220,38,38,.08);
+  color:#7f1d1d;
+  border-radius:12px;
+  padding:10px 12px;
+  font-weight:800;
+}
+
+/* --- inputs (if any) --- */
+input, select, textarea{
+  font:inherit;
+  width:100%;
+  padding:12px 12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#fff;
+}
+input:focus, select:focus, textarea:focus{
+  outline:none;
+  box-shadow:0 0 0 3px rgba(37,99,235,.18);
+  border-color:rgba(37,99,235,.5);
+}
+/* sub: 控えめボタン（戻る / キャンセル用） */
+.btnSub{
+  background:#fff;
+  border:1px solid var(--border);
+}
+.btnSub:hover{ background:#f3f4f6; }
+/* --- Layout container (for QuizLayout) --- */
+.container{
+  max-width:860px;
+  margin:0 auto;
+  padding:24px 16px 40px;
+}
+
+/* smaller stack helper */
+.stackSm{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+/* --- Card structure --- */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:0 6px 18px rgba(0,0,0,.06);
+  overflow:hidden;
+}
+
+.card-header{
+  padding:18px 18px 14px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.65));
+}
+
+.card-title{
+  margin:0;
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:.2px;
+}
+
+.card-subtitle{
+  margin:0;
+  color:var(--muted);
+  font-weight:700;
+  font-size:13px;
+}
+
+.card-body{
+  padding:18px;
+}
+
+/* inside card spacing safety (when children are plain divs) */
+.card-body > *:first-child { margin-top:0; }
+.card-body > *:last-child { margin-bottom:0; }
+/* --- Normal/Exam/Review common blocks --- */
+.kicker{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--muted);
+  font-weight:800;
+  font-size:13px;
+  margin:0 0 10px;
+}
+
+.question{
+  margin:0 0 12px;
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:.2px;
+}
+
+.panel{
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:12px;
+  padding:12px;
+}
+
+.panelSoft{
+  border:1px solid var(--border);
+  background:#f9fafb;
+  border-radius:12px;
+  padding:12px;
+}
+
+.choiceList{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:12px;
+}
+
+.explainBox{
+  margin-top:14px;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:12px;
+  padding:12px;
+}
+
+.explainTitle{
+  font-weight:900;
+  margin:0 0 6px;
+}
+
+.explainText{
+  white-space:pre-wrap;
+  line-height:1.75;
+  margin:0;
+}
+
+.actions{
+  margin-top:12px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.actions > .btn{
+  width:auto;
+  min-width:180px;
+}
+
+.note{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:700;
+}
+/* --- Exam result list --- */
+.resultList{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:12px;
+}
+
+.resultItem{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  background:#fff;
+}
+
+.resultHead{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:flex-start;
+}
+
+.resultQ{
+  font-weight:900;
+}
+
+.resultMark{
+  font-weight:900;
+}
+
+.resultChoices{
+  margin-top:10px;
+  display:grid;
+  gap:8px;
+}
+
+.resultExplain{
+  margin-top:10px;
+  white-space:pre-wrap;
+  line-height:1.75;
+}
+
+.resultMeta{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.timer{
+  font-weight:900;
+}
+/* --- Listening bar (Review) --- */
+.listenRow{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.listenHint{
+  color:var(--muted);
+  font-size:12.5px;
+  font-weight:700;
+}
+/* --- streak (Normal) --- */
+.streakPill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(245,158,11,.45);
+  background:rgba(245,158,11,.16);
+  font-weight:900;
+  font-size:12.5px;
+  color:#92400e;
+}
+
+.streakPop{
+  animation:streakPop .22s ease-out;
+}
+
+@keyframes streakPop{
+  0%{ transform:scale(.92); }
+  60%{ transform:scale(1.08); }
+  100%{ transform:scale(1); }
+}
+.btnGhost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: #111;
+}
+
+.btnGhost:hover {
+  background: #f3f4f6;
+}
+
+.btnDanger {
+  background: #dc2626;
+  color: white;
+}
+
+.btnDanger:hover {
+  background: #b91c1c;
+}
+
+/* -------------------------
+   Mobile & Game Safety Patch
+   ------------------------- */
+html, body { height: 100%; }
+body {
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* iPhone safe-area helpers */
+.safe-bottom {
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+}
+
+/* -------------------------
+   MyPage: Game Hero (C)
+   ------------------------- */
+.detailActionGrid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap:10px;
+  margin-top: 12px;
+}
+
+@media (min-width: 640px){
+  .detailActionGrid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.gameHero{
+  border:1px solid rgba(124,58,237,.22);
+  background: linear-gradient(180deg, rgba(237,233,254,.8), #fff);
+  border-radius:16px;
+  padding:12px;
+}
+
+.gameHeroTag{
+  font-size:12px;
+  font-weight:900;
+  color:#5b21b6;
+  margin-bottom:8px;
+}
+
+.gameHeroBtn{
+  width:100%;
+  border:none;
+  border-radius:14px;
+  padding:16px 14px;
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+  color:white;
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  box-shadow: 0 10px 18px rgba(91,33,182,.22);
+}
+
+.gameHeroBtn:active{
+  transform: translateY(1px);
+}
+
+.gameHeroNote{
+  margin-top:8px;
+  font-size:12px;
+  opacity:.75;
+}
+
+.gameHeroMiniRow{
+  margin-top:10px;
+}
+
+/* --- MyPage Hamburger / Drawer --- */
+.appHeader{
+  margin-top: 6px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.appHeaderLeft{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width: 0;
+}
+.appHeaderBrand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  text-decoration:none;
+  color:inherit;
+  font-weight:900;
+}
+.appHeaderLogo{
+  display:inline-flex;
+  width:28px;
+  height:28px;
+  border-radius:10px;
+  align-items:center;
+  justify-content:center;
+  background: #fff;
+  border: 1px solid var(--border);
+}
+.appHeaderName{
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
+.appHeaderTitle{
+  font-size: 12px;
+  opacity: 0.7;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
+
+.mypageTopbar{
+  margin-top:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.hamburgerBtn{
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:12px;
+  padding:10px 12px;
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+  line-height:1;
+}
+.drawerOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.35);
+  z-index:50;
+  display:flex;
+  justify-content:flex-end;
+}
+.drawerPanel{
+  width:min(320px, 86vw);
+  height:100%;
+  background:#fff;
+  padding:14px;
+  box-shadow:-12px 0 32px rgba(0,0,0,0.18);
+  display:flex;
+  flex-direction:column;
+}
+.drawerHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:6px 4px 12px;
+}
+.drawerClose{
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:10px;
+  padding:8px 10px;
+  cursor:pointer;
+  line-height:1;
+  font-weight:900;
+}
+.drawerBody{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.drawerBody .btn{
+  width:100%;
+}
+
+.drawerLink{
+  display:block;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  font-weight: 800;
+}
+.drawerLink:hover{
+  filter: brightness(0.98);
+}
+
+.drawerDivider{
+  height:1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+/* ---- Mobile app-like CTA bar ---- */
+:root{
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.withFixedCta{
+  padding-bottom: calc(92px + var(--safe-bottom));
+}
+
+.mobileFixedBar{
+  display: none;
+}
+
+@media (max-width: 640px){
+  .mobileFixedBar{
+    display: block;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    padding: 12px 14px calc(12px + var(--safe-bottom));
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0,0,0,0.08);
+    z-index: 60;
+  }
+
+  .mobileFixedBtn{
+    width: 100%;
+    padding: 14px 14px;
+    border-radius: 16px;
+    font-weight: 900;
+    font-size: 18px;
+    min-height: 52px;
+  }
+
+  .hideOnMobile{ display: none !important; }
+}
+/* --- Horizontal chip selector --- */
+.chipRow{
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chipRow::-webkit-scrollbar{
+  display: none;
+}
+
+.chip{
+  flex: 0 0 auto;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 900;
+  border: 1px solid #e7e7e7;
+  background: white;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.chipActive{
+  background: #111;
+  color: white;
+  border-color: #111;
+}
+
+/* ===== Drawer menu (AppHeader) ===== */
+.drawerLink{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 14px;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:16px;
+  background:rgba(255,255,255,.85);
+  text-decoration:none;
+  color:inherit;
+  font-weight:900;
+}
+.drawerIcon{font-size:20px; width:24px; text-align:center;}
+.drawerLabel{font-size:18px; letter-spacing:.02em;}

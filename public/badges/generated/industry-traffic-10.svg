@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Traffic 10">
+  <rect width="160" height="160" rx="32" fill="#f8fafc"/>
+  <circle cx="80" cy="68" r="42" fill="#2563eb" opacity="0.16"/>
+  <circle cx="80" cy="68" r="30" fill="#2563eb"/>
+  <text x="80" y="80" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="800" fill="#ffffff">T</text>
+  <text x="80" y="124" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="800" fill="#0f172a">10</text>
+</svg>

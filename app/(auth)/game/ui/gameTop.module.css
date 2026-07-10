@@ -1,0 +1,214 @@
+.wrap {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 18px 14px 22px;
+}
+
+/* ✅ 明るめの背景（暗さ解消） */
+.wrap::before {
+  content: "";
+  position: absolute;
+  inset: -140px;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(120, 190, 255, 0.28), transparent 45%),
+    radial-gradient(circle at 90% 0%, rgba(255, 190, 120, 0.22), transparent 55%),
+    radial-gradient(circle at 80% 90%, rgba(160, 220, 255, 0.18), transparent 55%),
+    radial-gradient(circle at 20% 85%, rgba(255, 210, 160, 0.16), transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.head {
+  position: relative;
+  z-index: 1;
+  margin: 6px 0 14px;
+}
+
+.h1 {
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.lead {
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.78;
+  line-height: 1.6;
+}
+
+.cards {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 1024px) {
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(8px);
+}
+
+.cardTop {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardTitle {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.cardDesc {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.tags {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.55);
+  font-size: 12px;
+  font-weight: 800;
+  opacity: 0.92;
+}
+
+.rankBox {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(6px);
+  min-height: 116px; /* ✅ カード高さ統一の土台 */
+}
+
+.rankHead {
+  font-size: 12px;
+  font-weight: 900;
+  opacity: 0.86;
+  margin-bottom: 8px;
+}
+
+.rankEmpty {
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.rankList {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rankRow {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.rankNo {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.rankName {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  opacity: 0.9;
+}
+
+.rankScore {
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+  opacity: 0.9;
+}
+
+.myBestRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 2px;
+}
+
+.myBestLabel {
+  font-size: 12px;
+  font-weight: 900;
+  opacity: 0.8;
+}
+
+.myBestScore {
+  font-size: 18px;
+  font-weight: 1000;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.actions {
+  margin-top: auto;
+  padding-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.7);
+  font-weight: 900;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btnMain {
+  border: none;
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+}
+
+.btn:hover {
+  filter: brightness(0.98);
+}

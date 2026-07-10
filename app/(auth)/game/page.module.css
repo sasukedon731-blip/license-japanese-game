@@ -1,0 +1,18 @@
+.gamePageOuter {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.gamePageInner {
+  width: 100%;
+  max-width: 520px; /* スマホは今の幅感 */
+  padding: 16px;
+}
+
+@media (min-width: 1024px) {
+  .gamePageInner {
+    max-width: 1100px; /* PCだけ広げる */
+    padding: 24px;
+  }
+}
