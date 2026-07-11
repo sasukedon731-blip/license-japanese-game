@@ -125,18 +125,10 @@ export async function POST(req: Request) {
       ...(email ? { customer_email: email } : {}),
     }
 
-    let session: KomojuSessionResponse
-    try {
-      session = await createKomojuSession(sessionPayload, komojuSecretKey)
-    } catch (e: any) {
-      if (e?.status === 400) {
-        const fallbackPayload = { ...sessionPayload }
-        delete fallbackPayload.payment_types
-        session = await createKomojuSession(fallbackPayload, komojuSecretKey)
-      } else {
-        throw e
-      }
-    }
+    // ユーザーが選択した支払方法だけをKOMOJUへ渡します。
+    // payment_typesを外して再試行すると、画面上の選択と異なる支払方法が
+    // 表示される可能性があるため、fallbackは行いません。
+    const session = await createKomojuSession(sessionPayload, komojuSecretKey)
 
     if (!session?.id || !session?.session_url) {
       throw new Error("KOMOJU session_url was not returned")

@@ -15,8 +15,8 @@ export default function CheckoutResultNotice({ checkout }: Props) {
           ご購入ありがとうございます
         </div>
         <div style={successText}>
-          決済が完了しました。コンビニ決済の場合は、入金確認後に学習機能が有効になります。
-          マイページで利用状態を確認できます。
+          購入手続きを受け付けました。クレジットカード決済は決済確認後、コンビニ決済は入金確認後に学習機能が有効になります。
+          反映まで少し時間がかかる場合があります。マイページで利用状態をご確認ください。
         </div>
         <div style={buttonRow}>
           <Link href="/select-mode" style={primaryBtn}>学習を始める</Link>
