@@ -650,7 +650,9 @@ export default function NormalClient({ quiz }: Props) {
           {
             totalSessions: p.totalSessions,
             todaySessions: p.todaySessions,
+            lastStudyDate: p.lastStudyDate,
             streak: p.streak,
+            streakUpdatedDate: p.streakUpdatedDate,
             bestStreak: p.bestStreak,
             updatedAt: serverTimestamp(),
           },

@@ -97,6 +97,19 @@ service cloud.firestore {
       allow write: if signedIn() && request.auth.uid == uid;
     }
 
+    match /users/{uid}/results/{resultId} {
+      allow read: if signedIn() && (
+        request.auth.uid == uid ||
+        isAdmin() ||
+        (
+          isCompanyAdmin() &&
+          get(/databases/$(database)/documents/users/$(uid)).data.companyCode == myCompanyCode()
+        )
+      );
+      allow create: if signedIn() && request.auth.uid == uid;
+      allow update, delete: if isAdmin();
+    }
+
     match /companies/{companyCode} {
       allow get: if signedIn() && (
         isAdmin() ||

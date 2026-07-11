@@ -1,0 +1,33 @@
+外免切替 Japanese Learning App 修正内容
+
+1. マイページ進捗表示
+- users/{uid}/progress の実データから学習回数、最終学習日、連続学習、カテゴリ別進捗を集計
+- users/{uid}/results の実データから平均正答率、最近の模擬試験履歴を表示
+- ユーザードキュメントの jlptBattleXp / jlptBattleLevel / badges からゲーム実績を表示
+- 固定値・架空の学習データは不使用
+- スマホ対応カード型UIへ刷新
+
+2. ハンバーガーメニュー
+- 右側ドロワー型へ刷新
+- 新PWAアイコンとアプリ名を上部表示
+- 現在ページを強調表示
+- 背景オーバーレイ、開閉アニメーション、Escキー、背景スクロール停止に対応
+- personal / company / company_admin / admin でメニューを出し分け
+- 企業契約ユーザーにはプラン購入導線を表示しない
+
+3. ヘッダー
+- 旧文字アイコンを新PWAアイコンに統一
+- 外免切替 + Japanese Learning App の2段表示
+- PC・スマホ双方で崩れにくいレスポンシブ表示
+
+4. 進捗保存
+- 通常学習完了時に lastStudyDate / streakUpdatedDate もFirestoreへ保存
+
+5. Firestore Rules
+- users/{uid}/results/{resultId} の本人作成・本人閲覧を許可
+- adminおよび同一企業のcompany_adminによる閲覧を許可
+
+確認結果
+- npx tsc --noEmit: 成功
+- next build: コンパイル成功、TypeScript成功
+- この検証環境では「Collecting page data using 55 workers」で長時間停止したため、最終完了表示までは未確認

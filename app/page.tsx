@@ -58,7 +58,7 @@ export default function HomePage() {
           <h1 style={styles.h1}>{APP_NAME}</h1>
           <p style={styles.lead}>
             外国免許切替に必要な日本語と交通知識を、クイズ・復習・模擬試験で継続学習できます。
-            個人利用はKOMOJU決済、企業利用は企業コードで開始できます。
+            個人利用はクレジットカードまたはコンビニで購入でき、企業利用は企業コードで開始できます。
           </p>
           <div style={styles.actions}>
             <button type="button" onClick={startLearning} style={styles.mainButton}>学習を開始</button>
@@ -74,7 +74,7 @@ export default function HomePage() {
             <li>日本語リスニング</li>
             <li>通常学習・模擬試験・復習</li>
             <li>企業コード登録</li>
-            <li>KOMOJU決済</li>
+            <li>クレジットカード・コンビニ決済</li>
           </ul>
         </div>
       </section>
@@ -92,7 +92,7 @@ export default function HomePage() {
       <section style={styles.planBand}>
         <div>
           <h2 style={styles.h2}>個人プランは500円から</h2>
-          <p style={styles.bandText}>30日・90日・180日から選択できます。コンビニ決済は入金確認後に有効化されます。</p>
+          <p style={styles.bandText}>30日500円・90日1,500円・180日3,000円（税込）から選択できます。長期割引はなく、自動更新もありません。コンビニ決済は入金確認後に有効化されます。</p>
         </div>
         <Link href="/plans" style={styles.darkButton}>プランを見る</Link>
       </section>

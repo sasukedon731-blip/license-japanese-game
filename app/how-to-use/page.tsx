@@ -23,7 +23,7 @@ export default function HowToUsePage() {
       <section style={styles.card}>
         <h2 style={styles.h2}>料金</h2>
         <p style={styles.text}>
-          個人プランは30日・90日・180日から選べます。自動更新はありません。
+          個人プランは30日500円・90日1,500円・180日3,000円（税込）から選べます。長期割引はなく、30日あたり500円の同一料金です。自動更新はありません。
           企業コードで登録したユーザーは、企業契約として利用できます。
         </p>
         <div style={styles.actions}>

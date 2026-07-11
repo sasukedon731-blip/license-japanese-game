@@ -8,27 +8,10 @@ import CheckoutResultNotice from "@/app/components/billing/CheckoutResultNotice"
 import KonbiniGuideNotice from "@/app/components/billing/KonbiniGuideNotice"
 import LegalFooter from "@/app/components/LegalFooter"
 import AppHeader from "@/app/components/AppHeader"
-
-type DurationDays = 30 | 90 | 180
+import { PLAN_OPTIONS, formatYen, type DurationDays } from "@/app/lib/pricing"
 type PaymentMethod = "card" | "convenience"
 
 const FULL_ACCESS_PLAN = "7"
-
-const PLAN_OPTIONS: Array<{
-  durationDays: DurationDays
-  label: string
-  sub: string
-  price: number
-  badge?: string
-}> = [
-  { durationDays: 30, label: "30日プラン", sub: "まず試したい方向け", price: 500 },
-  { durationDays: 90, label: "90日プラン", sub: "継続学習におすすめ", price: 1200, badge: "おすすめ" },
-  { durationDays: 180, label: "180日プラン", sub: "じっくり対策したい方向け", price: 2000, badge: "長期対策" },
-]
-
-function yen(n: number) {
-  return `¥${n.toLocaleString("ja-JP")}`
-}
 
 export default function PlansPage() {
   const router = useRouter()
@@ -93,7 +76,7 @@ export default function PlansPage() {
           <h1 style={styles.h1}>利用期間を選んで学習を続ける</h1>
           <p style={styles.text}>
             外免切替の知識対策、日本語学習、復習機能を利用できます。自動更新はありません。
-            コンビニ決済は入金確認後に有効化されます。
+            長期割引はなく、30日あたり500円の同一料金です。コンビニ決済は入金確認後に有効化されます。
           </p>
         </section>
 
@@ -114,7 +97,7 @@ export default function PlansPage() {
                   {p.badge ? <span style={styles.badge}>{p.badge}</span> : null}
                   <span style={styles.optionTitle}>{p.label}</span>
                   <span style={styles.optionSub}>{p.sub}</span>
-                  <span style={styles.price}>{yen(p.price)}</span>
+                  <span style={styles.price}>{formatYen(p.price)}</span>
                 </button>
               )
             })}
@@ -146,7 +129,7 @@ export default function PlansPage() {
         <section style={styles.totalCard}>
           <div>
             <div style={styles.totalLabel}>今回のお支払い</div>
-            <div style={styles.total}>{yen(selected.price)}</div>
+            <div style={styles.total}>{formatYen(selected.price)}</div>
             <p style={styles.text}>{selected.label}</p>
           </div>
           <button type="button" onClick={handleCheckout} disabled={loading} style={{ ...styles.checkout, opacity: loading ? 0.7 : 1 }}>

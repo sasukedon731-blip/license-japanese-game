@@ -2,10 +2,9 @@
 import { NextResponse } from "next/server"
 import { adminAuth, adminDb } from "@/app/lib/firebaseAdmin"
 import { setUserBillingMerge } from "@/app/lib/billingServer"
+import { PLAN_PRICES, type DurationDays } from "@/app/lib/pricing"
 
 export const runtime = "nodejs"
-
-type DurationDays = 30 | 90 | 180
 
 type Body = {
   idToken: string
@@ -27,12 +26,6 @@ type KomojuSessionResponse = {
 }
 
 const FULL_ACCESS_PLAN: Body["plan"] = "7"
-
-const PRICE_TABLE: Record<DurationDays, number> = {
-  30: 500,
-  90: 1200,
-  180: 2000,
-}
 
 function requireEnv(name: string) {
   const value = process.env[name]
@@ -106,7 +99,7 @@ export async function POST(req: Request) {
     const decoded = await adminAuth().verifyIdToken(body.idToken)
     const uid = decoded.uid
     const email = typeof decoded.email === "string" ? decoded.email : undefined
-    const amount = PRICE_TABLE[body.durationDays]
+    const amount = PLAN_PRICES[body.durationDays]
 
     const userRef = adminDb().collection("users").doc(uid)
     const userSnapBeforeCheckout = await userRef.get()
@@ -186,7 +179,7 @@ export async function POST(req: Request) {
   } catch (e: any) {
     console.error("KOMOJU checkout error:", e)
     return NextResponse.json(
-      { error: e?.message ?? "決済ページの作成に失敗しました" },
+      { error: "決済ページの作成に失敗しました。時間をおいて再度お試しください。" },
       { status: 500 }
     )
   }
