@@ -53,7 +53,7 @@ function basicAuth(secretKey: string) {
   return `Basic ${Buffer.from(`${secretKey}:`).toString("base64")}`
 }
 
-async function createKomojuSession(payload: Record<string, any>, secretKey: string) {
+async function createKomojuSession(payload: Record<string, unknown>, secretKey: string) {
   const res = await fetch("https://komoju.com/api/v1/sessions", {
     method: "POST",
     headers: {
@@ -99,6 +99,10 @@ export async function POST(req: Request) {
     const decoded = await adminAuth().verifyIdToken(body.idToken)
     const uid = decoded.uid
     const email = typeof decoded.email === "string" ? decoded.email : undefined
+    const name =
+      typeof decoded.name === "string" && decoded.name.trim()
+        ? decoded.name.trim()
+        : undefined
     const amount = PLAN_PRICES[body.durationDays]
 
     const userRef = adminDb().collection("users").doc(uid)
@@ -114,20 +118,36 @@ export async function POST(req: Request) {
     const orderRef = adminDb().collection("paymentOrders").doc()
     const orderId = orderRef.id
     const paymentType = body.method === "convenience" ? "konbini" : "credit_card"
-
-    const sessionPayload: Record<string, any> = {
-      amount,
-      currency: "JPY",
-      return_url: `${appUrl}/plans?checkout=success`,
-      external_order_num: orderId,
-      payment_types: [paymentType],
-      locale: "ja",
-      ...(email ? { customer_email: email } : {}),
+    const appBaseUrl = appUrl.replace(/\/+$/, "")
+    const metadata: Record<string, string> = {
+      uid,
+      order_id: orderId,
+      plan: FULL_ACCESS_PLAN,
+      duration_days: String(body.durationDays),
+      method: body.method,
+      industry: body.industry ?? "driver",
     }
 
-    // ユーザーが選択した支払方法だけをKOMOJUへ渡します。
-    // payment_typesを外して再試行すると、画面上の選択と異なる支払方法が
-    // 表示される可能性があるため、fallbackは行いません。
+    const sessionPayload: Record<string, unknown> = {
+      mode: "payment",
+      amount,
+      currency: "JPY",
+      return_url: `${appBaseUrl}/plans?checkout=return`,
+      external_customer_id: uid,
+      payment_types: [paymentType],
+      default_locale: "ja",
+      payment_data: {
+        external_order_num: orderId,
+        capture: "auto",
+      },
+      metadata,
+    }
+    if (email) sessionPayload.email = email
+    if (name) sessionPayload.name = name
+
+    // Hosted Page sessions collect payment details and handle 3D Secure on KOMOJU.
+    // Do not send raw payment_details or a separate cancel_url in the session payload.
+    // payment_types is limited to the payment method the user selected on this app.
     const session = await createKomojuSession(sessionPayload, komojuSecretKey)
 
     if (!session?.id || !session?.session_url) {

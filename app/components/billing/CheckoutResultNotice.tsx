@@ -8,6 +8,23 @@ type Props = {
 }
 
 export default function CheckoutResultNotice({ checkout }: Props) {
+  if (checkout === "return") {
+    return (
+      <section style={successBox}>
+        <div style={{ fontWeight: 900, fontSize: 20, color: "#166534" }}>
+          決済ページから戻りました
+        </div>
+        <div style={successText}>
+          決済状況を確認しています。カード決済は確認後、コンビニ決済は入金確認後に学習機能が有効になります。反映まで少し時間がかかる場合があります。
+        </div>
+        <div style={buttonRow}>
+          <Link href="/mypage" style={primaryBtn}>マイページで確認</Link>
+          <Link href="/plans" style={secondaryBtn}>プランへ戻る</Link>
+        </div>
+      </section>
+    )
+  }
+
   if (checkout === "success") {
     return (
       <section style={successBox}>
