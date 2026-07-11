@@ -11,8 +11,6 @@ import { auth, db } from "@/app/lib/firebase"
 import { useAuth } from "@/app/lib/useAuth"
 import { APP_MENU, type MenuIconName } from "@/app/components/appMenu"
 
-const APP_NAME = "外免切替 Japanese Learning App"
-
 type Props = { title?: string }
 type Profile = { accountType: "personal" | "company"; role: string }
 
