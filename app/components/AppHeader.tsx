@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { signOut } from "firebase/auth"
 
 import Button from "@/app/components/Button"
+import AppLogo from "@/app/components/AppLogo"
 import { auth } from "@/app/lib/firebase"
 import { useAuth } from "@/app/lib/useAuth"
 import { APP_MENU } from "@/app/components/appMenu"
@@ -38,7 +39,9 @@ export default function AppHeader({ title }: Props) {
       <header className="appHeader" aria-label="header">
         <div className="appHeaderLeft">
           <Link href="/" className="appHeaderBrand" aria-label="トップへ">
-            <span className="appHeaderLogo">外</span>
+            <span className="appHeaderLogo">
+              <AppLogo size={28} priority />
+            </span>
             <span className="appHeaderName">{APP_NAME}</span>
           </Link>
           {title ? <span className="appHeaderTitle">{title}</span> : null}

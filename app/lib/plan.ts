@@ -5,13 +5,13 @@ export type PlanId = "trial" | "free" | "3" | "5" | "7"
 export type SelectLimit = number
 
 export function getSelectLimit(plan: PlanId): SelectLimit {
-  if (plan === "trial" || plan === "free") return 1
+  void plan
   return Object.keys(quizzes).length
 }
 
 export function buildEntitledQuizTypes(plan: PlanId): QuizType[] {
+  void plan
   const all = Object.keys(quizzes) as QuizType[]
-  if (plan === "trial" || plan === "free") return all.slice(0, 1)
   return all
 }
 
@@ -22,10 +22,6 @@ export function normalizeSelectedForPlan(
 ): QuizType[] {
   const uniq = Array.from(new Set(selected)).filter((q) => entitled.includes(q))
   const limit = getSelectLimit(plan)
-
-  if (limit <= 1) {
-    return entitled.length ? [entitled[0]] : []
-  }
 
   const trimmed = uniq.slice(0, limit)
 

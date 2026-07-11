@@ -8,20 +8,9 @@ export function guardQuizAccess(params: {
   type: string | null
   selected: QuizType[]
 }): GuardResult {
-  const { type, selected } = params
+  void params.selected
 
-  // type 未指定
-  if (!type) {
-    return { ok: false, redirect: "/select-mode" }
-  }
-
-  // selected が空
-  if (!selected || selected.length === 0) {
-    return { ok: false, redirect: "/select-quizzes" }
-  }
-
-  // 未選択教材へアクセス
-  if (!selected.includes(type as QuizType)) {
+  if (!params.type) {
     return { ok: false, redirect: "/select-mode" }
   }
 
