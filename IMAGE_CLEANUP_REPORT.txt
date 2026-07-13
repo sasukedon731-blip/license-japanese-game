@@ -1,0 +1,21 @@
+外国免許切替 Japanese Learning App
+画像・配布物整理レポート
+
+実施内容
+1. 道路標識画像49枚を app/(public)/signs/512 から public/signs/512 へ移動
+   - コード参照 /signs/512/*.png と一致する正規のNext.js静的公開場所へ統一
+2. コードから参照されていない public/quiz-images（56枚）を削除
+3. 外免アプリで未使用の public/images/construction を削除
+4. 未使用のNext.js初期SVG素材を削除
+5. 秘密情報を含み得る .env.local を配布ZIPから削除
+6. .env.example は環境変数名だけを示す雛形として保持
+
+保持した画像
+- public/signs/512：道路標識49枚
+- public/badges/generated：実績バッジ（動的参照）
+- public/icons：PWA・OGP・アプリアイコン
+- favicon.ico
+
+注意
+- 道路標識は内容の正確性が重要なため、生成AIによる描き直しはしていません。
+- Vercelの環境変数はこのZIPには含まれません。既存のVercel設定を使用してください。
