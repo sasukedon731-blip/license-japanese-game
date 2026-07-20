@@ -89,10 +89,14 @@ const courseLabel = (id: string) => {
 const jstDay = (x: Date) => Math.floor((x.getTime() + 32400000) / 86400000);
 export default function BusinessDashboard({
   appName,
+  appHomeHref,
+  appHomeLabel = "アプリへ戻る",
   loginHref = "/company/login",
   companyField = "companyCode",
 }: {
   appName: string;
+  appHomeHref: string;
+  appHomeLabel?: string;
   loginHref?: string;
   companyField?: "companyCode" | "companyId";
 }) {
@@ -433,8 +437,8 @@ export default function BusinessDashboard({
               onCopy={copyCode}
             />
           )}
-          <a href="/home" style={{ color: "white", padding: 10 }}>
-            アプリへ戻る
+          <a href={appHomeHref} style={{ color: "white", padding: 10 }}>
+            {appHomeLabel}
           </a>
         </div>
         <nav style={s.sideNav} aria-label="Business Dashboard">
