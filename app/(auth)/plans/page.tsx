@@ -1,9 +1,12 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { auth } from "@/app/lib/firebase"
+import { onAuthStateChanged } from "firebase/auth"
+import { doc, getDoc } from "firebase/firestore"
+import { auth, db } from "@/app/lib/firebase"
+import { isCompanyAccount } from "@/app/lib/companyAccount"
 import CheckoutResultNotice from "@/app/components/billing/CheckoutResultNotice"
 import KonbiniGuideNotice from "@/app/components/billing/KonbiniGuideNotice"
 import LegalFooter from "@/app/components/LegalFooter"
@@ -21,11 +24,48 @@ export default function PlansPage() {
   const [method, setMethod] = useState<PaymentMethod>("convenience")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [companyUser, setCompanyUser] = useState(false)
+  const [accountChecking, setAccountChecking] = useState(true)
+
+  useEffect(() => onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      setAccountChecking(false)
+      return
+    }
+    try {
+      const snapshot = await getDoc(doc(db, "users", user.uid))
+      setCompanyUser(snapshot.exists() && isCompanyAccount(snapshot.data()))
+    } catch (loadError) {
+      console.error("Failed to check company account on plans page", loadError)
+    } finally {
+      setAccountChecking(false)
+    }
+  }), [])
 
   const selected = useMemo(
     () => PLAN_OPTIONS.find((p) => p.durationDays === durationDays) ?? PLAN_OPTIONS[1],
     [durationDays]
   )
+
+  if (accountChecking) {
+    return <main style={styles.page}><div style={styles.shell}>契約情報を確認中...</div></main>
+  }
+
+  if (companyUser) {
+    return (
+      <main style={styles.page}>
+        <div style={styles.shell}>
+          <AppHeader title="プラン" />
+          <section style={styles.hero}>
+            <p style={styles.eyebrow}>企業契約</p>
+            <h1 style={styles.h1}>個人で購入する必要はありません</h1>
+            <p style={styles.text}>利用料金は企業契約に含まれています。企業コードでログインして、そのまま学習を利用できます。</p>
+          </section>
+          <div style={styles.backWrap}><Link href="/select-mode" style={styles.backLink}>学習選択へ戻る</Link></div>
+        </div>
+      </main>
+    )
+  }
 
   const handleCheckout = async () => {
     setError("")

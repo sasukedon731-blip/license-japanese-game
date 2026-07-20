@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import { createUserWithEmailAndPassword, deleteUser, updateProfile, type User } from "firebase/auth"
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 
@@ -21,6 +21,7 @@ export default function CompanyPage() {
   const register = async () => {
     setError("")
     setLoading(true)
+    let createdUser: User | null = null
     try {
       const code = companyCode.trim().toUpperCase()
       if (!code) throw new Error("企業コードを入力してください。")
@@ -28,12 +29,14 @@ export default function CompanyPage() {
       if (!email.trim()) throw new Error("メールアドレスを入力してください。")
       if (password.length < 6) throw new Error("パスワードは6文字以上で入力してください。")
 
+      const cred = await createUserWithEmailAndPassword(auth, email, password)
+      createdUser = cred.user
+
       const companySnap = await getDoc(doc(db, "companies", code))
       if (!companySnap.exists()) throw new Error("企業コードが見つかりません。")
       const company = companySnap.data() as any
       if (company?.active === false) throw new Error("この企業コードは現在利用できません。")
 
-      const cred = await createUserWithEmailAndPassword(auth, email, password)
       await updateProfile(cred.user, { displayName: name })
 
       const entitled = buildEntitledQuizTypes("7")
@@ -58,9 +61,13 @@ export default function CompanyPage() {
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       })
+      createdUser = null
 
       router.push("/select-mode")
     } catch (e: any) {
+      if (createdUser) {
+        try { await deleteUser(createdUser) } catch (cleanupError) { console.error("Failed to roll back Auth user", cleanupError) }
+      }
       setError(e?.message ?? "企業コード登録に失敗しました。")
     } finally {
       setLoading(false)

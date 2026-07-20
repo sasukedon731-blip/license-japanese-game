@@ -1,5 +1,6 @@
 // app/api/komoju/checkout/route.ts
 import { NextResponse } from "next/server"
+import { isCompanyAccount } from "@/app/lib/companyAccount"
 import { adminAuth, adminDb } from "@/app/lib/firebaseAdmin"
 import { setUserBillingMerge } from "@/app/lib/billingServer"
 import { PLAN_PRICES, type DurationDays } from "@/app/lib/pricing"
@@ -108,10 +109,7 @@ export async function POST(req: Request) {
     const userRef = adminDb().collection("users").doc(uid)
     const userSnapBeforeCheckout = await userRef.get()
     const userBeforeCheckout = userSnapBeforeCheckout.exists ? userSnapBeforeCheckout.data() : null
-    if (
-      userBeforeCheckout?.accountType === "company" ||
-      userBeforeCheckout?.billing?.accountType === "company"
-    ) {
+    if (isCompanyAccount(userBeforeCheckout)) {
       return NextResponse.json({ error: "企業契約ユーザーは支払い不要です。" }, { status: 403 })
     }
 

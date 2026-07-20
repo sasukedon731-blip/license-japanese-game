@@ -10,6 +10,7 @@ import { auth, db } from "@/app/lib/firebase"
 import AppHeader from "@/app/components/AppHeader"
 import BillingStatusCard from "@/app/components/billing/BillingStatusCard"
 import type { BillingLike } from "@/app/lib/billingAccess"
+import { isCompanyAccount } from "@/app/lib/companyAccount"
 
 const LICENSE_TYPES = new Set(["gaikoku-license", "road-signs"])
 const JAPANESE_TYPES = new Set([
@@ -66,6 +67,7 @@ export default function MyPage() {
   const [displayName, setDisplayName] = useState("")
   const [email, setEmail] = useState("")
   const [billing, setBilling] = useState<BillingLike | null>(null)
+  const [companyAccount, setCompanyAccount] = useState(false)
   const [progress, setProgress] = useState<ProgressDoc[]>([])
   const [results, setResults] = useState<ResultDoc[]>([])
   const [stats, setStats] = useState<UserStats>({ jlptBattleXp: 0, jlptBattleLevel: 1, badges: [] })
@@ -87,6 +89,7 @@ export default function MyPage() {
         setDisplayName(data?.displayName || user.displayName || "")
         setEmail(user.email || data?.email || "")
         setBilling((data?.billing ?? null) as BillingLike | null)
+        setCompanyAccount(isCompanyAccount(data))
         setStats({
           jlptBattleXp: toNumber(data?.jlptBattleXp),
           jlptBattleLevel: Math.max(1, toNumber(data?.jlptBattleLevel) || 1),
@@ -151,7 +154,7 @@ export default function MyPage() {
         </section>
 
         {loadError ? <div className="mypageError">{loadError}</div> : null}
-        <BillingStatusCard billing={billing} />
+        <BillingStatusCard billing={billing} companyAccount={companyAccount} userName={displayName || email} />
 
         <section className="mypageSummaryGrid" aria-label="学習サマリー">
           <SummaryCard label="学習回数" value={`${summary.totalSessions}回`} sub="完了した学習セッション" icon="✓" />

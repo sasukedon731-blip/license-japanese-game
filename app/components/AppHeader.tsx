@@ -10,6 +10,7 @@ import AppLogo from "@/app/components/AppLogo"
 import { auth, db } from "@/app/lib/firebase"
 import { useAuth } from "@/app/lib/useAuth"
 import { APP_MENU, type MenuIconName } from "@/app/components/appMenu"
+import { isCompanyAccount } from "@/app/lib/companyAccount"
 
 type Props = { title?: string }
 type Profile = { accountType: "personal" | "company"; role: string }
@@ -40,7 +41,7 @@ export default function AppHeader({ title }: Props) {
     getDoc(doc(db, "users", user.uid)).then((snap) => {
       const data = snap.data()
       setProfile({
-        accountType: data?.accountType === "company" ? "company" : "personal",
+        accountType: isCompanyAccount(data) ? "company" : "personal",
         role: typeof data?.role === "string" ? data.role : "user",
       })
     }).catch(() => undefined)

@@ -13,13 +13,15 @@ import {
 type Props = {
   billing?: BillingLike | null
   plansHref?: string
+  companyAccount?: boolean
+  userName?: string
 }
 
-export default function BillingStatusCard({ billing, plansHref = "/plans" }: Props) {
+export default function BillingStatusCard({ billing, plansHref = "/plans", companyAccount = false, userName = "" }: Props) {
   const state = getBillingViewState(billing)
   const daysLeft = getBillingDaysLeft(billing)
   const endDate = getBillingEndDate(billing)
-  const isCompany = state === "company"
+  const isCompany = companyAccount || state === "company"
 
   return (
     <section style={styles.card}>
@@ -34,8 +36,14 @@ export default function BillingStatusCard({ billing, plansHref = "/plans" }: Pro
       <div style={styles.panel}>
         <div style={styles.label}>現在のプラン</div>
         <div style={styles.value}>{isCompany ? "企業契約" : getPlanLabel(billing?.currentPlan)}</div>
-        <State state={state} />
-        {state === "active" || state === "trialing" ? (
+        {isCompany ? (
+          <div style={styles.stateBox}>
+            <div style={styles.stateTitle}>{userName || "企業ユーザー"}</div>
+            <div style={styles.stateDesc}>契約区分：企業契約</div>
+            <div style={styles.stateDesc}>利用料金は企業契約に含まれています。個人で購入する必要はありません。</div>
+          </div>
+        ) : <State state={state} />}
+        {!isCompany && (state === "active" || state === "trialing") ? (
           <div style={styles.grid}>
             <Info label="残り日数" value={`${daysLeft}日`} />
             <Info label="有効期限" value={formatDateJP(endDate)} />

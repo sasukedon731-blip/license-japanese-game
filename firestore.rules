@@ -42,11 +42,18 @@ service cloud.firestore {
       ];
     }
 
+    function isSameCompanyUser(uid) {
+      return isCompanyAdmin() &&
+        exists(/databases/$(database)/documents/users/$(uid)) &&
+        myCompanyCode() != null &&
+        userDoc(uid).data.companyCode == myCompanyCode();
+    }
+
     match /users/{uid} {
       allow get: if signedIn() && (
         request.auth.uid == uid ||
         isAdmin() ||
-        (isCompanyAdmin() && resource.data.companyCode == myCompanyCode())
+        isSameCompanyUser(uid)
       );
 
       allow list: if signedIn() && (
@@ -80,7 +87,14 @@ service cloud.firestore {
 
       allow update: if signedIn() &&
         request.auth.uid == uid &&
-        !request.resource.data.diff(resource.data).affectedKeys().hasAny(protectedUserKeys());
+        (
+          !request.resource.data.diff(resource.data).affectedKeys().hasAny(protectedUserKeys()) ||
+          (
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(["uid", "updatedAt"]) &&
+            !resource.data.keys().hasAny(["uid"]) &&
+            request.resource.data.uid == request.auth.uid
+          )
+        );
 
       allow delete: if isAdmin();
     }
@@ -90,8 +104,7 @@ service cloud.firestore {
         request.auth.uid == uid ||
         isAdmin() ||
         (
-          isCompanyAdmin() &&
-          get(/databases/$(database)/documents/users/$(uid)).data.companyCode == myCompanyCode()
+          isSameCompanyUser(uid)
         )
       );
       allow write: if signedIn() && request.auth.uid == uid;
@@ -102,8 +115,7 @@ service cloud.firestore {
         request.auth.uid == uid ||
         isAdmin() ||
         (
-          isCompanyAdmin() &&
-          get(/databases/$(database)/documents/users/$(uid)).data.companyCode == myCompanyCode()
+          isSameCompanyUser(uid)
         )
       );
       allow create: if signedIn() && request.auth.uid == uid;
@@ -113,8 +125,8 @@ service cloud.firestore {
     match /companies/{companyCode} {
       allow get: if signedIn() && (
         isAdmin() ||
-        (resource.data.active != false) ||
-        (isCompanyAdmin() && companyCode == myCompanyCode())
+        (isCompanyAdmin() && companyCode == myCompanyCode()) ||
+        resource.data.active != false
       );
       allow list: if signedIn() && isAdmin();
       allow create, update, delete: if isAdmin();

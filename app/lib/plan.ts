@@ -1,5 +1,6 @@
 import { quizzes } from "@/app/data/quizzes"
 import type { QuizType } from "@/app/data/types"
+import { isCompanyAccount } from "@/app/lib/companyAccount"
 
 export type PlanId = "trial" | "free" | "3" | "5" | "7"
 export type SelectLimit = number
@@ -40,7 +41,7 @@ export type BillingMethod = "convenience" | "card" | "bank_transfer"
 export type AccountType = "personal" | "company"
 
 export function getBillingStatus(userDoc: any): BillingStatus {
-  if (userDoc?.accountType === "company" || userDoc?.billing?.accountType === "company") {
+  if (isCompanyAccount(userDoc)) {
     return "active"
   }
 
@@ -59,7 +60,7 @@ export function getBillingStatus(userDoc: any): BillingStatus {
 }
 
 export function isAccessActive(userDoc: any): boolean {
-  if (userDoc?.accountType === "company" || userDoc?.billing?.accountType === "company") {
+  if (isCompanyAccount(userDoc)) {
     return true
   }
 
@@ -78,7 +79,7 @@ export function isAccessActive(userDoc: any): boolean {
 }
 
 export function getEffectivePlanId(userDoc: any): PlanId {
-  if (userDoc?.accountType === "company" || userDoc?.billing?.accountType === "company") return "7"
+  if (isCompanyAccount(userDoc)) return "7"
 
   const p = userDoc?.billing?.currentPlan ?? userDoc?.plan
   return p === "trial" || p === "free" || p === "3" || p === "5" || p === "7"

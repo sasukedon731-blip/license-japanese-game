@@ -17,6 +17,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore"
+import { isCompanyAccount } from "@/app/lib/companyAccount"
 
 export type UserPlanState = {
   devUnlockAll?: boolean
@@ -83,10 +84,6 @@ function addDays(date: Date, days: number) {
   const d = new Date(date)
   d.setDate(d.getDate() + days)
   return d
-}
-
-function isCompanyAccount(data: any) {
-  return data?.accountType === "company" || data?.billing?.accountType === "company"
 }
 
 function trialBilling(plan: PlanId) {
