@@ -8,6 +8,7 @@ import ListeningControls from '@/app/components/ListeningControls'
 import AudioPlayerButton from '@/app/components/AudioPlayerButton'
 import QuestionImage from '@/app/components/QuestionImage'
 import type { Quiz, QuizType, Question } from '@/app/data/types'
+import { migrateN3QuestionStorage } from '@/app/lib/n3QuestionMigration'
 import { formatCorrectAnswerLabels, getCorrectIndexes, isCorrectSelection, isMultiAnswerQuestion, isSelectionComplete, requiredAnswerCount, shuffleQuestionChoices as shuffleQuestionChoicesWithAnswers, stripLeadingAnswerLabel } from '@/app/lib/questionAnswer'
 
 import { useAuth } from '@/app/lib/useAuth'
@@ -214,6 +215,8 @@ export default function NormalClient({ quiz }: Props) {
   const progressKey = `${STORAGE_PROGRESS_KEY}-${quizType}`
   const sessionKey = `${STORAGE_NORMAL_SESSION_KEY}-${quizType}`
   const sectionKey = `${STORAGE_NORMAL_SECTION_PREFIX}-${quizType}`
+
+  useEffect(() => { migrateN3QuestionStorage() }, [quizType])
 
   const goModeSelect = () => {
     router.push(`/select-mode?type=${quizType}`)
