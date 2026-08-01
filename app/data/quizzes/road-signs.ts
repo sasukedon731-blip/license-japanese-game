@@ -222,7 +222,7 @@ export const roadSignsQuiz: Quiz = {
       imageUrl: "/signs/512/301.png",
       choices: ["通行止め", "車両通行止め", "車両進入禁止", "歩行者通行止め"],
       correctIndex: 0,
-      explanation: "赤い横棒＝通行止めです。",
+      explanation: "赤い斜線が交差する「×」の標識は、通行止めを示します。",
     },
     {
       id: 1302,
@@ -242,7 +242,7 @@ export const roadSignsQuiz: Quiz = {
       imageUrl: "/signs/512/303.png",
       choices: ["車両進入禁止", "通行止め", "車両通行止め", "歩行者通行止め"],
       correctIndex: 0,
-      explanation: "赤丸の中に車＝車両進入禁止（入ってはいけない）です。",
+      explanation: "赤い円の中の白い横棒は、車両進入禁止を示します。",
     },
     {
       id: 1304,
@@ -377,12 +377,12 @@ export const roadSignsQuiz: Quiz = {
     {
       id: 1317,
       sectionId: "regulation",
-      signId: "317",
+      signId: "330-A",
       question: "この標識の意味は？",
       imageUrl: "/signs/512/317.png",
-      choices: ["駐車余地", "駐車禁止", "時間制限駐車区間", "通行止め"],
+      choices: ["一時停止", "徐行", "前方優先道路", "車両進入禁止"],
       correctIndex: 0,
-      explanation: "『駐車してよい』ではなく、待避・退避のための余地（駐車余地）を示します。",
+      explanation: "一時停止（330-A）は、車両および路面電車が停止線の直前で一時停止することを示します。",
     },
     {
       id: 1318,
@@ -457,12 +457,12 @@ export const roadSignsQuiz: Quiz = {
     {
       id: 1325,
       sectionId: "regulation",
-      signId: "327",
+      signId: "327の8",
       question: "この標識の意味は？",
       imageUrl: "/signs/512/327.png",
-      choices: ["車両通行区分", "進行方向別通行区分", "転回禁止", "通行止め"],
+      choices: ["一般原付の二段階右折", "一般原付の小回り右折", "指定方向外進行禁止", "転回禁止"],
       correctIndex: 0,
-      explanation: "車線ごとに通行できる車両を区分する標識です。",
+      explanation: "一般原動機付自転車が、交差点で二段階右折することを指定する標識（327の8）です。",
     },
     {
       id: 1326,

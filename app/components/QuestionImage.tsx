@@ -2,12 +2,16 @@
 'use client'
 
 import type { Question } from '@/app/data/types'
+import {
+  resolveQuestionImageSource,
+  type QuestionImagePurpose,
+} from './questionImageSource'
 
 type Props = {
   q: Question
   size?: number
   mode?: 'sign' | 'auto'
-  purpose?: 'question' | 'choice' | 'explanation'
+  purpose?: QuestionImagePurpose
 }
 
 export default function QuestionImage({
@@ -16,18 +20,7 @@ export default function QuestionImage({
   mode = 'auto',
   purpose = 'question',
 }: Props) {
-  const src =
-    purpose === 'choice'
-      ? q.choiceImageUrl ?? null
-      : purpose === 'explanation'
-        ? q.explanationImageUrl ?? null
-        : mode === 'auto'
-          ? q.signId
-            ? `/signs/512/${q.signId}.png`
-            : q.imageUrl ?? null
-          : q.signId
-            ? `/signs/512/${q.signId}.png`
-            : q.imageUrl ?? null
+  const src = resolveQuestionImageSource(q, purpose)
 
   if (!src) return null
 

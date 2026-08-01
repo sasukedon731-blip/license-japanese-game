@@ -1,7 +1,7 @@
 // app/(auth)/game/fromQuizzes.ts
 import { quizzes } from "@/app/data/quizzes"
-import type { QuizType } from "@/app/data/types"
 import type { GameQuestion, GameDifficulty, GameKind } from "./types"
+import { isGameQuizType, type GameQuizType } from "./gameQuizTypes"
 
 export type GameGenOptions = {
   difficulty?: GameDifficulty
@@ -21,7 +21,9 @@ const DEFAULT_OPTS: Required<GameGenOptions> = {
   allowAutoTrimChoice: false,
 }
 
-export function buildGameQuestionsFromQuizzes(quizType: QuizType, opts?: GameGenOptions): GameQuestion[] {
+export function buildGameQuestionsFromQuizzes(quizType: unknown, opts?: GameGenOptions): GameQuestion[] {
+  if (!isGameQuizType(quizType)) return []
+
   const merged = { ...DEFAULT_OPTS, ...(opts ?? {}) } as Required<GameGenOptions>
 
   // ✅ japanese-n4 はデフォ difficulty をN4寄せ（optsで指定があれば優先）
@@ -67,7 +69,7 @@ export const buildGamePoolFromQuizzes = buildGameQuestionsFromQuizzes
 // -------------------------
 function mapStudyToGame(
   q: any,
-  quizType: QuizType,
+  quizType: GameQuizType,
   index: number,
   o: Required<GameGenOptions>
 ): GameQuestion | null {
@@ -165,7 +167,7 @@ function mapStudyToGame(
 // -------------------------
 // ✅ sectionId ベース（N4のみ強制）
 // -------------------------
-function inferKindBySection(quizType: QuizType, sectionId: string): GameKind | null {
+function inferKindBySection(quizType: GameQuizType, sectionId: string): GameKind | null {
   if (quizType === "japanese-n4") {
     if (sectionId === "moji-goi") return "speed-choice"
     if (sectionId === "bunpo") return "tile-drop"
